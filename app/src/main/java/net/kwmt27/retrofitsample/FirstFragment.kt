@@ -1,12 +1,18 @@
 package net.kwmt27.retrofitsample
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.fragment.findNavController
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import net.kwmt27.retrofitsample.data.GitHubService
+import net.kwmt27.retrofitsample.data.model.Repo
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -24,7 +30,25 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val resultTextView = view.findViewById<TextView>(R.id.textview_first)
+
         view.findViewById<Button>(R.id.button_first).setOnClickListener {
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://api.github.com/")
+                .build()
+
+            val gitHubService = retrofit.create(GitHubService::class.java)
+            val repos: Call<List<Repo>> = gitHubService.listRepos("kwmt")
+
+             repos.enqueue(object: retrofit2.Callback<List<Repo>> {
+                 override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
+                     Log.d("FirstFragment", call.toString())
+                 }
+
+                 override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
+                     Log.d("FirstFragment", call.toString())
+                 }
+             } )
         }
     }
 }
