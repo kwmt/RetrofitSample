@@ -35,20 +35,21 @@ class FirstFragment : Fragment() {
         view.findViewById<Button>(R.id.button_first).setOnClickListener {
             val retrofit = Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
+                .addConverterFactory(MyConverterFactory())
                 .build()
 
             val gitHubService = retrofit.create(GitHubService::class.java)
             val repos: Call<List<Repo>> = gitHubService.listRepos("kwmt")
 
-             repos.enqueue(object: retrofit2.Callback<List<Repo>> {
-                 override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
-                     Log.d("FirstFragment", call.toString())
-                 }
+            repos.enqueue(object : retrofit2.Callback<List<Repo>> {
+                override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
+                    Log.d("GitHubSample", t.message)
+                }
 
-                 override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
-                     Log.d("FirstFragment", call.toString())
-                 }
-             } )
+                override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
+                    Log.d("GitHubSample", response.toString())
+                }
+            })
         }
     }
 }
