@@ -1,12 +1,14 @@
 package net.kwmt27.retrofitsample
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.fab
+import kotlinx.android.synthetic.main.activity_main.toolbar
+import net.kwmt27.retrofitsample.MainActivity.Companion.TAG
+import java.lang.reflect.Proxy
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,8 +18,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            Log.d(TAG, "start")
+            val some: ISome = SomeImpl()
+            some.doSomething(100)
+            Log.d(TAG, "end")
+
+            val proxy = create(ISome::class.java)
+            proxy.doSomething(1000)
         }
     }
 
@@ -35,5 +42,31 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun <T> create(service: Class<T>): T {
+        return Proxy.newProxyInstance(
+            service.classLoader,
+            Array(1) { service }
+        ) { proxy, method, args ->
+            Log.d(TAG, "before: invoke method called..")
+            Log.d(TAG, method.name)
+            Log.d(TAG, "after: invoke method called..")
+
+        } as T
+    }
+
+    companion object {
+        val TAG = MainActivity::class.java.simpleName
+    }
+}
+
+interface ISome {
+    fun doSomething(value: Int)
+}
+
+class SomeImpl : ISome {
+    override fun doSomething(value: Int) {
+        Log.d(TAG, value.toString())
     }
 }
