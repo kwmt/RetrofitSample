@@ -1,7 +1,6 @@
 package net.kwmt27.retrofitsample
 
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.list
 import net.kwmt27.retrofitsample.data.model.Repo
 import okhttp3.ResponseBody
