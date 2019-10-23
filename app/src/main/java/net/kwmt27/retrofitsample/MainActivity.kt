@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.fab
 import kotlinx.android.synthetic.main.activity_main.toolbar
 import net.kwmt27.retrofitsample.MainActivity.Companion.TAG
+import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Proxy
 
 class MainActivity : AppCompatActivity() {
@@ -19,12 +20,12 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             Log.d(TAG, "start")
-            val some: ISome = SomeImpl()
+            val some: Service = SomeImpl()
             some.doSomething(100)
             Log.d(TAG, "end")
 
-            val proxy = create(ISome::class.java)
-            proxy.doSomething(1000)
+            val service = create(Service::class.java)
+            service.doSomething(1000)
         }
     }
 
@@ -47,13 +48,13 @@ class MainActivity : AppCompatActivity() {
     fun <T> create(service: Class<T>): T {
         return Proxy.newProxyInstance(
             service.classLoader,
-            Array(1) { service }
-        ) { proxy, method, args ->
-            Log.d(TAG, "before: invoke method called..")
-            Log.d(TAG, method.name)
-            Log.d(TAG, "after: invoke method called..")
-
-        } as T
+            Array(1) { service },
+            InvocationHandler { proxy, method, args ->
+                Log.d(TAG, "start")
+                Log.d(TAG, method.name + if (args.isNotEmpty()) args[0] else "")
+                Log.d(TAG, "end")
+            }
+        ) as T
     }
 
     companion object {
@@ -61,11 +62,11 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-interface ISome {
+interface Service {
     fun doSomething(value: Int)
 }
 
-class SomeImpl : ISome {
+class SomeImpl : Service {
     override fun doSomething(value: Int) {
         Log.d(TAG, value.toString())
     }
