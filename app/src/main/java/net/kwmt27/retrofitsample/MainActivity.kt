@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun <T> create(service: Class<T>): T {
+    private fun <T> create(service: Class<T>): T {
         return Proxy.newProxyInstance(
             service.classLoader,
             Array(1) { service },
