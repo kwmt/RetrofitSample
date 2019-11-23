@@ -1,5 +1,6 @@
 package net.kwmt27.retrofitsample
 
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.list
 import net.kwmt27.retrofitsample.data.model.Repo
@@ -20,14 +21,15 @@ class MyConverterFactory : Converter.Factory() {
     }
 
     class MyResponseBodyConverter : Converter<ResponseBody, List<Repo>> {
+        @UnstableDefault
         override fun convert(value: ResponseBody): List<Repo>? {
             val reader = BufferedReader(value.byteStream().reader())
             val content = StringBuilder()
-            reader.use { reader ->
-                var line = reader.readLine()
+            reader.use {
+                var line = it.readLine()
                 while (line != null) {
                     content.append(line)
-                    line = reader.readLine()
+                    line = it.readLine()
                 }
             }
 

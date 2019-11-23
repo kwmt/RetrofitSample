@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener { _ ->
             Log.d(TAG, "start")
             val some: Service = SomeImpl()
             some.doSomething(100)
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         return Proxy.newProxyInstance(
             service.classLoader,
             Array(1) { service },
-            InvocationHandler { proxy, method, args ->
+            InvocationHandler { _, method, args ->
                 Log.d(TAG, "start")
                 Log.d(TAG, method.name + if (args.isNotEmpty()) args[0] else "")
                 Log.d(TAG, "end")
