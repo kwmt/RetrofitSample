@@ -30,10 +30,8 @@ class GitHubServiceImpl : GitHubServiceWithoutRetrofit {
         }
     }
 
-    private fun readStream(inputStream: BufferedInputStream): List<Repo> {
-        return inputStream.bufferedReader().use {
-            convert(it)
-        }
+    private fun readStream(inputStream: BufferedInputStream) = inputStream.bufferedReader().use {
+        convert(it)
     }
 
     private fun convert(reader: BufferedReader): List<Repo> {
@@ -45,8 +43,6 @@ class GitHubServiceImpl : GitHubServiceWithoutRetrofit {
                 line = it.readLine()
             }
         }
-
-        val json = Json { strictMode = false }
-        return json.parse(Repo.serializer().list, content.toString())
+        return Json { strictMode = false }.parse(Repo.serializer().list, content.toString())
     }
 }

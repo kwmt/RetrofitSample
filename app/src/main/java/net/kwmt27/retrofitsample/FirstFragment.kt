@@ -35,11 +35,12 @@ class FirstFragment : Fragment() {
 
         val resultTextView = view.findViewById<TextView>(R.id.textview_first)
 
-        val gitHubServiceWithRetrofit: GitHubServiceWithRetrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
-            .addConverterFactory(MyConverterFactory())
-            .build()
-            .create(GitHubServiceWithRetrofit::class.java)
+        val gitHubServiceWithRetrofit: GitHubServiceWithRetrofit =
+            Retrofit.Builder()
+                .baseUrl("https://api.github.com/")
+                .addConverterFactory(MyConverterFactory())
+                .build()
+                .create(GitHubServiceWithRetrofit::class.java)
 
         view.findViewById<Button>(R.id.retrofit_button).setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
