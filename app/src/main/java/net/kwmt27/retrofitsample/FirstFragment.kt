@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.kwmt27.retrofitsample.data.ErrorHandlingCallAdapterFactory
 import net.kwmt27.retrofitsample.data.GitHubServiceWithRetrofit
 import net.kwmt27.retrofitsample.data.GitHubServiceImpl
 import net.kwmt27.retrofitsample.data.GitHubServiceWithoutRetrofit
@@ -39,6 +40,7 @@ class FirstFragment : Fragment() {
             Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
                 .addConverterFactory(MyConverterFactory())
+//                .addCallAdapterFactory(ErrorHandlingCallAdapterFactory())
                 .build()
                 .create(GitHubServiceWithRetrofit::class.java)
 
