@@ -1,11 +1,9 @@
 package net.kwmt27.retrofitsample.data
 
-import android.content.res.Resources
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.lang.IllegalStateException
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
